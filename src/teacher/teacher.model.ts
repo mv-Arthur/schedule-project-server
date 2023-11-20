@@ -1,4 +1,5 @@
-import { Column, DataType, Table, Model } from "sequelize-typescript";
+import { Column, DataType, Table, Model, HasMany } from "sequelize-typescript";
+import { Discipline } from "src/discipline/discipline.model";
 
 interface TeacherCreationAttrs {
 	name: string;
@@ -21,4 +22,6 @@ export class Teacher extends Model<Teacher, TeacherCreationAttrs> {
 	surname: string;
 	@Column({ type: DataType.STRING, allowNull: false })
 	patronimyc: string;
+	@HasMany(() => Discipline)
+	disciplines: Discipline[];
 }

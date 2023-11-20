@@ -3,10 +3,12 @@ import { TeacherController } from "./teacher.controller";
 import { TeacherService } from "./teacher.service";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { Teacher } from "./teacher.model";
+import { Discipline } from "src/discipline/discipline.model";
+import { DisciplineModule } from "src/discipline/discipline.module";
 
 @Module({
 	controllers: [TeacherController],
 	providers: [TeacherService],
-	imports: [SequelizeModule.forFeature([Teacher])],
+	imports: [SequelizeModule.forFeature([Teacher, Discipline])],
 })
 export class TeacherModule {}

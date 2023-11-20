@@ -17,6 +17,11 @@ export class TeacherController {
 		return this.teacherService.getAllTeachers();
 	}
 
+	@Get("/:id")
+	getOneTeacher(@Param("id") id: number) {
+		return this.teacherService.getOneTeacher(id);
+	}
+
 	@Delete("/:id")
 	deleteTeacher(@Param("id") id: number) {
 		return this.teacherService.deleteTeacher(id);

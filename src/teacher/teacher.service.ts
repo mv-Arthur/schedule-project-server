@@ -18,6 +18,11 @@ export class TeacherService {
 		return teachers;
 	}
 
+	async getOneTeacher(id: number) {
+		const teacher = await this.teacherRepository.findByPk(id, { include: { all: true } });
+		return teacher;
+	}
+
 	async deleteTeacher(id: number) {
 		const deletedTeacher = await this.teacherRepository.destroy({
 			where: {

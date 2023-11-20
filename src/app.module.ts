@@ -5,6 +5,8 @@ import { ConfigModule } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { TeacherModule } from "./teacher/teacher.module";
 import { Teacher } from "./teacher/teacher.model";
+import { DisciplineModule } from "./discipline/discipline.module";
+import { Discipline } from "./discipline/discipline.model";
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -17,10 +19,11 @@ import { Teacher } from "./teacher/teacher.model";
 			username: process.env.POSTGRES_USER,
 			password: process.env.POSTGRES_PASSWORD,
 			database: process.env.POSTGRES_NAME,
-			models: [Teacher],
+			models: [Teacher, Discipline],
 			autoLoadModels: true,
 		}),
 		TeacherModule,
+		DisciplineModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
