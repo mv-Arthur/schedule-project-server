@@ -11,7 +11,7 @@ interface DisciplineCreationAttrs {
 	teacherId?: number;
 }
 
-@Table({ tableName: "discipline" })
+@Table({ tableName: "discipline", timestamps: false })
 export class Discipline extends Model<Discipline, DisciplineCreationAttrs> {
 	@Column({
 		type: DataType.INTEGER,

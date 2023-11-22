@@ -25,6 +25,14 @@ export class DisciplineService {
 		return discipline;
 	}
 
+	async getDisciplineById(id: number) {
+		return await this.disciplineRepository.findOne({
+			where: {
+				id,
+			},
+		});
+	}
+
 	async getAllDisciplinesTeacher(teacherId: number) {
 		const disciplines = await this.disciplineRepository.findAll({
 			where: {

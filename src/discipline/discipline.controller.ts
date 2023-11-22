@@ -12,8 +12,13 @@ export class DisciplineController {
 	}
 
 	@Get("/:teacherId")
-	getAllTeachers(@Param("teacherId") teacherId: number) {
+	getAllDisciplinesTeacher(@Param("teacherId") teacherId: number) {
 		return this.disciplineService.getAllDisciplinesTeacher(teacherId);
+	}
+
+	@Get("/:teacherId/:id")
+	getdisciplineById(@Param("id") id: number) {
+		return this.disciplineService.getDisciplineById(id);
 	}
 
 	@Delete("/:id")
