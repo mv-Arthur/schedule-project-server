@@ -8,7 +8,7 @@ interface GroupCreationAttrs {
 	nameOfSpec: string;
 }
 
-@Table({ tableName: "group" })
+@Table({ tableName: "group", timestamps: false })
 export class Group extends Model<Group, GroupCreationAttrs> {
 	@Column({
 		type: DataType.INTEGER,

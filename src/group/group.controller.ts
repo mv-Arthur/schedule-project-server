@@ -22,7 +22,7 @@ export class GroupController {
 	}
 
 	@Put("/:id")
-	editGroup(@Param("id") id: number, groupDto: CreateGroupDto) {
+	editGroup(@Param("id") id: number, @Body() groupDto: CreateGroupDto) {
 		return this.groupService.updateGroup(groupDto, id);
 	}
 }
