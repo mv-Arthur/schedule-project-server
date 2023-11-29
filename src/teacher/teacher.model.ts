@@ -22,6 +22,6 @@ export class Teacher extends Model<Teacher, TeacherCreationAttrs> {
 	surname: string;
 	@Column({ type: DataType.STRING, allowNull: false })
 	patronimyc: string;
-	@HasMany(() => Discipline)
+	@HasMany(() => Discipline, { onDelete: "CASCADE" })
 	disciplines: Discipline[];
 }

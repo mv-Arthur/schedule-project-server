@@ -1,4 +1,6 @@
-import { Column, DataType, Table, Model, BelongsTo, ForeignKey } from "sequelize-typescript";
+import { Column, DataType, Table, Model, BelongsTo, ForeignKey, BelongsToMany } from "sequelize-typescript";
+import { GroupDiscipline } from "src/group/group-discipline.model";
+import { Group } from "src/group/group.model";
 import { Teacher } from "src/teacher/teacher.model";
 
 interface DisciplineCreationAttrs {
@@ -36,4 +38,7 @@ export class Discipline extends Model<Discipline, DisciplineCreationAttrs> {
 	@ForeignKey(() => Teacher)
 	@Column({ type: DataType.INTEGER })
 	teacherId: number;
+
+	@BelongsToMany(() => Group, () => GroupDiscipline)
+	group: Group[];
 }
