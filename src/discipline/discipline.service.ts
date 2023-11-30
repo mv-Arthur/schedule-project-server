@@ -53,8 +53,8 @@ export class DisciplineService {
 
 	async updateDiscipline(dto: CreateDisciplineDto, id: number) {
 		const exstendedDto = { ...dto, allHours: dto.hoursQtyFirstSemester + dto.hoursQtySecondSemester };
-		if(!exstendedDto.name) {
-			throw new Error("discipline name has not be empty")
+		if (!exstendedDto.name) {
+			throw new Error("discipline name has not be empty");
 		}
 		const updatedTeacher = await this.disciplineRepository.update(exstendedDto, {
 			where: {

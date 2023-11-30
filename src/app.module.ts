@@ -9,7 +9,8 @@ import { DisciplineModule } from "./discipline/discipline.module";
 import { Discipline } from "./discipline/discipline.model";
 import { GroupModule } from "./group/group.module";
 import { Group } from "./group/group.model";
-import { GroupDiscipline } from "./group/group-discipline.model";
+import { AttachedDiscipline } from "./group/attachedDiscipline.model";
+
 @Module({
 	imports: [
 		ConfigModule.forRoot({
@@ -22,7 +23,7 @@ import { GroupDiscipline } from "./group/group-discipline.model";
 			username: process.env.POSTGRES_USER,
 			password: process.env.POSTGRES_PASSWORD,
 			database: process.env.POSTGRES_NAME,
-			models: [Teacher, Discipline, Group, GroupDiscipline],
+			models: [Teacher, Discipline, Group, AttachedDiscipline],
 			autoLoadModels: true,
 		}),
 		TeacherModule,

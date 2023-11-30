@@ -1,6 +1,5 @@
-import { Column, DataType, Table, Model, BelongsToMany } from "sequelize-typescript";
-import { Discipline } from "src/discipline/discipline.model";
-import { GroupDiscipline } from "./group-discipline.model";
+import { Column, DataType, Table, Model, HasMany } from "sequelize-typescript";
+import { AttachedDiscipline } from "./attachedDiscipline.model";
 
 interface GroupCreationAttrs {
 	groupNumber: string;
@@ -23,7 +22,6 @@ export class Group extends Model<Group, GroupCreationAttrs> {
 	numberOfCourse: number;
 	@Column({ type: DataType.STRING, allowNull: false })
 	nameOfSpec: string;
-
-	@BelongsToMany(() => Discipline, () => GroupDiscipline)
-	discipline: Discipline[];
+	@HasMany(() => AttachedDiscipline, { onDelete: "CASCADE" })
+	disciplines: AttachedDiscipline[];
 }
