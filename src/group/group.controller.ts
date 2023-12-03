@@ -17,6 +17,11 @@ export class GroupController {
 		return this.groupService.getAllGroups();
 	}
 
+	@Get("/:id")
+	getGroupById(@Param("id") id: number) {
+		return this.groupService.getGroupById(id);
+	}
+
 	@Delete("/:id")
 	deleteGroup(@Param("id") id: number) {
 		return this.groupService.deleteGroup(id);

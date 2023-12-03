@@ -21,6 +21,11 @@ export class GroupService {
 		return group;
 	}
 
+	async getGroupById(id: number) {
+		const group = await this.groupRepository.findByPk(id);
+		return group;
+	}
+
 	async getAllGroups() {
 		const groups = await this.groupRepository.findAll({
 			include: {
