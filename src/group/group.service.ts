@@ -2,18 +2,22 @@ import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { Group } from "./group.model";
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateGroupDto } from "./dto/create-group.dto";
-import { AttachedDiscipline } from "./attachedDiscipline.model";
+import { Attached } from "./attached.model";
 import { AddTeacherAndDisciplineDto } from "./dto/add-teacher-and-discipline.dto";
 import { Teacher } from "src/teacher/teacher.model";
 import { Discipline } from "src/discipline/discipline.model";
+import { AttachedDiscipline } from "./attachedDiscipline.model";
+import { AttachedTeacher } from "./attachedTeacher.model";
 
 @Injectable()
 export class GroupService {
 	constructor(
 		@InjectModel(Group) private groupRepository: typeof Group,
-		@InjectModel(AttachedDiscipline) private AttachedDisciplineRepository: typeof AttachedDiscipline,
-		@InjectModel(Discipline) private disciplineRepository: typeof Discipline,
-		@InjectModel(Teacher) private teacherRepository: typeof Teacher
+		@InjectModel(Attached) private attachedRepository: typeof Attached,
+		@InjectModel(AttachedDiscipline) private attachedDisciplineRepository: typeof AttachedDiscipline,
+		@InjectModel(AttachedTeacher) private attachedTeacherRepository: typeof AttachedTeacher,
+		@InjectModel(Teacher) private teacherRepository: typeof Teacher,
+		@InjectModel(Discipline) private disciplineRepository: typeof Discipline
 	) {}
 
 	async createGroup(dto: CreateGroupDto) {
@@ -22,15 +26,20 @@ export class GroupService {
 	}
 
 	async getGroupById(id: number) {
-		const group = await this.groupRepository.findByPk(id);
+		const group = await this.groupRepository.findByPk(id, {
+			include: {
+				model: Attached,
+				include: [AttachedDiscipline, AttachedTeacher],
+			},
+		});
 		return group;
 	}
 
 	async getAllGroups() {
 		const groups = await this.groupRepository.findAll({
 			include: {
-				model: AttachedDiscipline,
-				include: [Discipline, Teacher],
+				model: Attached,
+				include: [AttachedDiscipline, AttachedTeacher],
 			},
 		});
 		return groups;
@@ -58,32 +67,27 @@ export class GroupService {
 		const teacher = await this.teacherRepository.findByPk(dto.teacherId);
 		const discipline = await this.disciplineRepository.findByPk(dto.disciplineId);
 
+		delete teacher.dataValues.id;
+		delete teacher.dataValues.createdAt;
+		delete teacher.dataValues.updatedAt;
+
+		delete discipline.dataValues.teacherId;
+		delete discipline.dataValues.id;
+
 		if (!teacher && !discipline) {
 			throw new HttpException("дисциплина или преподаватель не найдены", HttpStatus.BAD_REQUEST);
 		}
 
-		const attachedDisciplineCreationObj = {
-			groupId: Number(groupId),
-		};
+		const attached = await this.attachedRepository.create({ groupId: groupId });
+		const attachedTeacher = await this.attachedTeacherRepository.create({ ...teacher.dataValues, attachedId: attached.id });
+		const attachedDiscipline = await this.attachedDisciplineRepository.create({ ...discipline.dataValues, attachedId: attached.id });
 
-		const attachedDiscipline = await this.AttachedDisciplineRepository.create(attachedDisciplineCreationObj);
-		await this.teacherRepository.update(
-			{ ...teacher, attachedDisciplineId: attachedDiscipline.id },
-			{
-				where: {
-					id: teacher.id,
-				},
-			}
-		);
-		await this.disciplineRepository.update(
-			{ ...discipline, attachedDisciplineId: attachedDiscipline.id },
-			{
-				where: {
-					id: discipline.id,
-				},
-			}
-		);
-		const founded = await this.AttachedDisciplineRepository.findAll({ include: { all: true } });
-		return founded;
+		const group = await this.groupRepository.findByPk(groupId, {
+			include: {
+				model: Attached,
+				include: [AttachedDiscipline, AttachedTeacher],
+			},
+		});
+		return group;
 	}
 }

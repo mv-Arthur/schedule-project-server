@@ -9,6 +9,8 @@ import { DisciplineModule } from "./discipline/discipline.module";
 import { Discipline } from "./discipline/discipline.model";
 import { GroupModule } from "./group/group.module";
 import { Group } from "./group/group.model";
+import { Attached } from "./group/attached.model";
+import { AttachedTeacher } from "./group/attachedTeacher.model";
 import { AttachedDiscipline } from "./group/attachedDiscipline.model";
 
 @Module({
@@ -23,7 +25,7 @@ import { AttachedDiscipline } from "./group/attachedDiscipline.model";
 			username: process.env.POSTGRES_USER,
 			password: process.env.POSTGRES_PASSWORD,
 			database: process.env.POSTGRES_NAME,
-			models: [Teacher, Discipline, Group, AttachedDiscipline],
+			models: [Teacher, Discipline, Group, Attached, AttachedTeacher, AttachedDiscipline],
 			autoLoadModels: true,
 		}),
 		TeacherModule,

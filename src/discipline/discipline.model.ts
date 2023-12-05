@@ -1,5 +1,4 @@
 import { Column, DataType, Table, Model, BelongsTo, ForeignKey, BelongsToMany } from "sequelize-typescript";
-import { AttachedDiscipline } from "src/group/attachedDiscipline.model";
 
 import { Teacher } from "src/teacher/teacher.model";
 
@@ -11,7 +10,6 @@ interface DisciplineCreationAttrs {
 	weeklyLoadFirstWeek: number;
 	allHours: number;
 	teacherId?: number;
-	attachedDisciplineId?: number;
 }
 
 @Table({ tableName: "discipline", timestamps: false })
@@ -40,8 +38,4 @@ export class Discipline extends Model<Discipline, DisciplineCreationAttrs> {
 	@ForeignKey(() => Teacher)
 	@Column({ type: DataType.INTEGER })
 	teacherId: number;
-
-	@ForeignKey(() => AttachedDiscipline)
-	@Column({ type: DataType.INTEGER })
-	attachedDisciplineId: number;
 }

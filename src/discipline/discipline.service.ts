@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Discipline } from "./discipline.model";
 import { InjectModel } from "@nestjs/sequelize";
 import { CreateDisciplineDto } from "./dto/create-discipline.dtp";
@@ -15,7 +15,7 @@ export class DisciplineService {
 		const exstendedDto = { ...dto, allHours: dto.hoursQtyFirstSemester + dto.hoursQtySecondSemester };
 		const teacher = await this.teacherRepository.findByPk(teacherId);
 		if (!teacher) {
-			throw new Error("teacher not found");
+			throw new Error("учитель на найден");
 		}
 
 		const discipline = await this.disciplineRepository.create({
@@ -54,7 +54,7 @@ export class DisciplineService {
 	async updateDiscipline(dto: CreateDisciplineDto, id: number) {
 		const exstendedDto = { ...dto, allHours: dto.hoursQtyFirstSemester + dto.hoursQtySecondSemester };
 		if (!exstendedDto.name) {
-			throw new Error("discipline name has not be empty");
+			throw new HttpException("название дисциплины не может быть пустым", HttpStatus.BAD_REQUEST);
 		}
 		const updatedTeacher = await this.disciplineRepository.update(exstendedDto, {
 			where: {

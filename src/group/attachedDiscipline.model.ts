@@ -1,14 +1,16 @@
-import { Column, DataType, Table, Model, HasMany, HasOne, ForeignKey } from "sequelize-typescript";
-import { Discipline } from "src/discipline/discipline.model";
-import { Teacher } from "src/teacher/teacher.model";
-import { Group } from "./group.model";
-
-interface attachedDisciplineCreationAttrs {
-	groupId: number;
+import { Column, DataType, Table, Model, BelongsTo, ForeignKey, BelongsToMany } from "sequelize-typescript";
+import { Attached } from "src/group/attached.model";
+interface DisciplineCreationAttrs {
+	name: string;
+	hoursQtyFirstSemester: number;
+	hoursQtySecondSemester: number;
+	weeklyLoadSecondWeek: number;
+	weeklyLoadFirstWeek: number;
+	allHours: number;
+	attachedId?: number;
 }
-
-@Table({ tableName: "attachedDisciplines", timestamps: false })
-export class AttachedDiscipline extends Model<AttachedDiscipline, attachedDisciplineCreationAttrs> {
+@Table({ tableName: "AttachedDiscipline", timestamps: false })
+export class AttachedDiscipline extends Model<AttachedDiscipline, DisciplineCreationAttrs> {
 	@Column({
 		type: DataType.INTEGER,
 		unique: true,
@@ -16,12 +18,21 @@ export class AttachedDiscipline extends Model<AttachedDiscipline, attachedDiscip
 		primaryKey: true,
 	})
 	id: number;
-	@HasOne(() => Discipline)
-	discipline: Discipline;
-	@HasOne(() => Teacher)
-	teacher: Teacher;
 
-	@ForeignKey(() => Group)
+	@Column({ type: DataType.STRING, allowNull: false })
+	name: string;
+	@Column({ type: DataType.INTEGER, allowNull: false })
+	hoursQtyFirstSemester: number;
+	@Column({ type: DataType.INTEGER, allowNull: false })
+	hoursQtySecondSemester: number;
+	@Column({ type: DataType.INTEGER, allowNull: false })
+	weeklyLoadSecondWeek: number;
+	@Column({ type: DataType.INTEGER, allowNull: false })
+	weeklyLoadFirstWeek: number;
+	@Column({ type: DataType.INTEGER, allowNull: false })
+	allHours: number;
+
+	@ForeignKey(() => Attached)
 	@Column({ type: DataType.INTEGER })
-	groupId: number;
+	attachedId: number;
 }

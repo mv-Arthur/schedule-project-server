@@ -1,14 +1,14 @@
-import { Column, DataType, Table, Model, HasMany } from "sequelize-typescript";
+import { Column, DataType, Table, Model, HasMany, ForeignKey } from "sequelize-typescript";
 import { Discipline } from "src/discipline/discipline.model";
-
+import { Attached } from "./attached.model";
 interface TeacherCreationAttrs {
 	name: string;
 	surname: string;
 	patronimyc: string;
+	attachedId?: number;
 }
-
-@Table({ tableName: "teachers" })
-export class Teacher extends Model<Teacher, TeacherCreationAttrs> {
+@Table({ tableName: "AttachedTeacher" })
+export class AttachedTeacher extends Model<AttachedTeacher, TeacherCreationAttrs> {
 	@Column({
 		type: DataType.INTEGER,
 		unique: true,
@@ -22,6 +22,7 @@ export class Teacher extends Model<Teacher, TeacherCreationAttrs> {
 	surname: string;
 	@Column({ type: DataType.STRING, allowNull: false })
 	patronimyc: string;
-	@HasMany(() => Discipline, { onDelete: "CASCADE" })
-	disciplines: Discipline[];
+	@ForeignKey(() => Attached)
+	@Column({ type: DataType.INTEGER })
+	attachedId: number;
 }
