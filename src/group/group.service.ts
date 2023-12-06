@@ -82,12 +82,23 @@ export class GroupService {
 		const attachedTeacher = await this.attachedTeacherRepository.create({ ...teacher.dataValues, attachedId: attached.id });
 		const attachedDiscipline = await this.attachedDisciplineRepository.create({ ...discipline.dataValues, attachedId: attached.id });
 
-		const group = await this.groupRepository.findByPk(groupId, {
-			include: {
-				model: Attached,
-				include: [AttachedDiscipline, AttachedTeacher],
+		const att = await this.attachedRepository.findByPk(attached.id, {
+			include: [AttachedDiscipline, AttachedTeacher],
+		});
+		return att;
+	}
+
+	async deleteAttached(attachedId: number) {
+		const attached = await this.attachedRepository.findByPk(attachedId, {
+			include: [AttachedDiscipline, AttachedTeacher],
+		});
+
+		await this.attachedRepository.destroy({
+			where: {
+				id: attached.id,
 			},
 		});
-		return group;
+
+		return attached;
 	}
 }

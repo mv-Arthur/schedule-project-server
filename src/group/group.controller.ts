@@ -36,4 +36,9 @@ export class GroupController {
 	testAddDisciplineToGroup(@Param("id") id: number, @Body() dto: AddTeacherAndDisciplineDto) {
 		return this.groupService.testAddDisciplineToGroup(id, dto);
 	}
+
+	@Delete("/attached/:id")
+	deleteAttached(@Param("id") id: number) {
+		return this.groupService.deleteAttached(id);
+	}
 }
